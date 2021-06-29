@@ -34,7 +34,17 @@
 
 ---
 ### Comments:
+- посмотреть для чего нужны секции main и keywords в package.json
+- странная ошибка с semver при попытке установить webpack через npm:
+```
+npm ERR! semver.simplifyRange is not a function
 
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/aincube/.npm/_logs/2021-06-29T19_05_55_364Z-debug.log
+```
+[? Возможнoе решение](https://stackoverflow.com/questions/66729025/npm-err-semver-simplifyrange-is-not-a-function)
+
+при этом `yarn` отработал без ошибок
 
 ---
 ## Lesson 2:
