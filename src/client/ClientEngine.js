@@ -64,7 +64,6 @@ class ClientEngine {
     const spriteCfg = this.sprites[sprite[0]][sprite[1]];
     const [fx, fy, fw, fh] = spriteCfg.frames[frame];
     const img = this.images[spriteCfg.img];
-
     this.ctx.drawImage(img, fx, fy, fw, fh, x, y, w, h);
   }
 }

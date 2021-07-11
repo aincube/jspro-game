@@ -1,23 +1,29 @@
 class ClientWorld {
-  constructor(game, engine, levelCfg) {
+  constructor(game, engine, worldCfg) {
     Object.assign(this, {
       game,
       engine,
-      levelCfg,
-      height: levelCfg.map.height,
-      // TODO: What the magic is this?!
-      width: levelCfg.map[0].length,
+      worldCfg,
+      height: worldCfg.map.height,
+      width: worldCfg.map[0].length,
     });
   }
 
   init() {
-    this.engine.renderSpriteFrame({
-      sprite: ['terrain', 'wall'],
-      frame: 0,
-      x: 0,
-      y: 0,
-      w: 48,
-      h: 48,
+    const { map } = this.worldCfg;
+
+    map.forEach((cfgRow, y) => {
+      cfgRow.forEach((cfgCell, x) => {
+        const [, , sW, sH] = this.engine.sprites.terrain[cfgCell[0]].frames[0];
+        this.engine.renderSpriteFrame({
+          sprite: ['terrain', cfgCell[0]],
+          frame: 0,
+          x: x * sW,
+          y: y * sH,
+          w: sW,
+          h: sH,
+        });
+      });
     });
   }
 }
