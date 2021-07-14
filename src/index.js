@@ -1,8 +1,4 @@
 import './index.scss';
-// import HeroSprite from './assets/Male-2-Walk.png';
-// import terrainAtlas from './assets/terrain.png';
-// import worldCfg from './configs/world.json';
-// import sprites from './configs/sprites';
 
 import ClientGame from './client/ClientGame';
 
