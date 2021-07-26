@@ -23,8 +23,28 @@ class ClientGame {
     this.player = player;
   }
 
-  movePlayer(dcol, drow) {
-    this.player.moveByCellCoord(dcol, drow, (cell) => cell.findObjectsByType('grass').length);
+  movePlayer(dir) {
+    const dirs = {
+      left: [-1, 0],
+      right: [1, 0],
+      up: [0, -1],
+      down: [0, 1],
+    };
+
+    const { player } = this;
+
+    if (player && player.motionProgress === 1) {
+      const canMove = player.moveByCellCoord(
+        dirs[dir][0],
+        dirs[dir][1],
+        (cell) => cell.findObjectsByType('grass').length,
+      );
+
+      if (canMove) {
+        player.setState(dir);
+        player.once('motion-stopped', () => player.setState('main'));
+      }
+    }
   }
 
   createEngine() {
@@ -56,22 +76,22 @@ class ClientGame {
     this.engine.input.onKey({
       ArrowLeft: (keydown) => {
         if (keydown) {
-          this.movePlayer(-1, 0);
+          this.movePlayer('left');
         }
       },
       ArrowRight: (keydown) => {
         if (keydown) {
-          this.movePlayer(1, 0);
+          this.movePlayer('right');
         }
       },
       ArrowDown: (keydown) => {
         if (keydown) {
-          this.movePlayer(0, 1);
+          this.movePlayer('down');
         }
       },
       ArrowUp: (keydown) => {
         if (keydown) {
-          this.movePlayer(0, -1);
+          this.movePlayer('up');
         }
       },
     });

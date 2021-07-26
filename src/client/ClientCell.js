@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import PositionedObject from '../common/PositionedObject';
 import ClientGameObject from './ClientGameObject';
 
@@ -25,21 +26,39 @@ class ClientCell extends PositionedObject {
   initGameObjects() {
     const { cellCfg } = this;
 
-    this.objects = cellCfg[0].map((objCfg) => new ClientGameObject({ cell: this, objCfg }));
+    this.objects = cellCfg.map((layer, layerId) =>
+      // eslint-disable-next-line implicit-arrow-linebreak
+      layer.map((objCfg) => new ClientGameObject({ cell: this, objCfg, layerId })),
+    // eslint-disable-next-line function-paren-newline
+    );
   }
 
-  render(time) {
+  render(time, layerId) {
     const { objects } = this;
-
-    objects.map((obj) => obj.render(time));
+    if (objects[layerId]) {
+      objects[layerId].forEach((obj) => obj.render(time));
+    }
   }
 
   addGameObject(objToAdd) {
-    this.objects.push(objToAdd);
+    const { objects } = this;
+    if (objToAdd.layerId === undefined) {
+      // eslint-disable-next-line no-param-reassign
+      objToAdd.layerId = objects.length;
+    }
+
+    if (!objects[objToAdd.layerId]) {
+      objects[objToAdd.layerId] = [];
+    }
+
+    objects[objToAdd.layerId].push(objToAdd);
   }
 
   removeGameObject(objToRemove) {
-    this.objects = this.objects.filter((obj) => obj !== objToRemove);
+    const { objects } = this;
+
+    // eslint-disable-next-line no-return-assign
+    objects.forEach((layer, layerId) => (objects[layerId] = layer.filter((obj) => obj !== objToRemove)));
   }
 
   findObjectsByType(type) {
