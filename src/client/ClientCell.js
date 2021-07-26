@@ -26,10 +26,11 @@ class ClientCell extends PositionedObject {
   initGameObjects() {
     const { cellCfg } = this;
 
-    this.objects = cellCfg.map((layer, layerId) =>
-      // eslint-disable-next-line implicit-arrow-linebreak
-      layer.map((objCfg) => new ClientGameObject({ cell: this, objCfg, layerId })),
-    // eslint-disable-next-line function-paren-newline
+    this.objects = cellCfg.map(
+      (layer, layerId) =>
+        // eslint-disable-next-line implicit-arrow-linebreak
+        layer.map((objCfg) => new ClientGameObject({ cell: this, objCfg, layerId })),
+      // eslint-disable-next-line function-paren-newline
     );
   }
 
@@ -62,7 +63,11 @@ class ClientCell extends PositionedObject {
   }
 
   findObjectsByType(type) {
-    return this.objects.filter((obj) => obj.type === type);
+    let foundObjects = [];
+
+    // eslint-disable-next-line no-return-assign
+    this.objects.forEach((layer) => foundObjects = [...foundObjects, ...layer].filter((obj) => obj.type === type));
+    return foundObjects;
   }
 }
 
