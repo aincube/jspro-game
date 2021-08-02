@@ -32,20 +32,22 @@ class ClientCell extends PositionedObject {
   initGameObjects() {
     const { cellCfg, objectClasses } = this;
 
-    this.objects = cellCfg.map((layer, layerId) =>
-      // eslint-disable-next-line implicit-arrow-linebreak
-      layer.map((objCfg) => {
-        let ObjectClass;
+    this.objects = cellCfg.map(
+      (layer, layerId) =>
+        // eslint-disable-next-line implicit-arrow-linebreak
+        layer.map((objCfg) => {
+          let ObjectClass;
 
-        if (objCfg.class) {
-          ObjectClass = objectClasses[objCfg.class];
-        } else {
-          ObjectClass = ClientGameObject;
-        }
+          if (objCfg.class) {
+            ObjectClass = objectClasses[objCfg.class];
+            console.log(ObjectClass);
+          } else {
+            ObjectClass = ClientGameObject;
+          }
 
-        return new ObjectClass({ cell: this, objCfg, layerId });
-      }),
-    // eslint-disable-next-line function-paren-newline
+          return new ObjectClass({ cell: this, objCfg, layerId });
+        }),
+      // eslint-disable-next-line function-paren-newline
     );
   }
 

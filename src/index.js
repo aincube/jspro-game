@@ -109,7 +109,13 @@ import ClientGame from './client/ClientGame';
 // img.addEventListener('load', () => {
 //   window.requestAnimationFrame(walk);
 // });
+const btn = document.getElementById('startbtn');
 
-window.addEventListener('load', () => {
-  ClientGame.init({ tagId: 'game' });
+btn.addEventListener('click', (event) => {
+  event.preventDefault();
+
+  const startGame = document.getElementsByClassName('start-game');
+  startGame[0].style.display = 'none';
+  const playerName = document.getElementById('name');
+  ClientGame.init({ tagId: 'game', playerName: playerName.value });
 });

@@ -11,6 +11,7 @@ class ClientGame {
       cfg,
       gameObjects,
       player: null,
+      playerName: cfg.playerName,
     });
 
     this.engine = this.createEngine();
@@ -60,6 +61,7 @@ class ClientGame {
       });
 
       this.engine.start();
+      this.engine.focus();
       this.initKeys();
     });
   }
