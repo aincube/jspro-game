@@ -40,7 +40,6 @@ class ClientCell extends PositionedObject {
 
           if (objCfg.class) {
             ObjectClass = objectClasses[objCfg.class];
-            console.log(ObjectClass);
           } else {
             ObjectClass = ClientGameObject;
           }
