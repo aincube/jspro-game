@@ -88,3 +88,8 @@ npm ERR!     /home/aincube/.npm/_logs/2021-06-29T19_05_55_364Z-debug.log
 
 ## Lesson 5: 
 Понять досконально почему мы вычитаем координаты камеры, т.е. как она накладывается на сетку
+
+## Lesson 7
+небольшая неконсистентность в названии методов на сервере:
+_chat connection_ но при этом _chat disconnect_
+Тогда или *connection/disconnection* или *connect/disconnect*
