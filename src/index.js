@@ -112,7 +112,9 @@ import { getTime } from './common/util';
 // img.addEventListener('load', () => {
 //   window.requestAnimationFrame(walk);
 // });
-const socket = io('https://jsprochat.herokuapp.com');
+
+// const socket = io('https://jsprochat.herokuapp.com');
+const socket = io('https://jspromarathonchat.herokuapp.com');
 
 const btn = document.getElementById('startbtn');
 const formName = document.getElementById('nameForm');
@@ -150,7 +152,10 @@ cform.addEventListener('submit', (e) => {
 });
 
 socket.on('chat message', (data) => {
-  message.insertAdjacentHTML('beforeend', `<p><i>${getTime(data.time)}</i> - ${data.msg}</p>`);
+  let color = '';
+  // eslint-disable-next-line no-unused-expressions
+  data.id === socket.id ? color = 'red' : color = 'green';
+  message.insertAdjacentHTML('beforeend', `<p><i>${getTime(data.time)}</i> - <strong><span style="color: ${color}">${data.name}</span></strong>: ${data.msg}</p>`);
 });
 
 socket.on('chat connection', (data) => {
@@ -162,5 +167,12 @@ socket.on('chat disconnect', (data) => {
 });
 
 socket.on('chat online', (data) => {
-  message.insertAdjacentHTML('beforeend', `<p><i>${getTime(data.time)}</i> - Нас всего ${data.online}. И вот эти герои: ${data.names}</p>`);
+  let names = '';
+  data.names.forEach((user) => {
+    if (user?.name) names += `${user.name},`;
+  });
+  message.insertAdjacentHTML(
+    'beforeend',
+    `<p><i>${getTime(data.time)}</i> - Нас всего ${data.online}. И вот эти герои: ${names}</p>`,
+  );
 });
