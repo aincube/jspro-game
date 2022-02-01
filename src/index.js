@@ -1,6 +1,9 @@
 import './index.scss';
 
+import { io } from 'socket.io-client';
+
 import ClientGame from './client/ClientGame';
+import { getTime } from './common/util';
 
 // /** @type {HTMLCanvasElement} */
 // const canvas = document.getElementById('game');
@@ -110,6 +113,66 @@ import ClientGame from './client/ClientGame';
 //   window.requestAnimationFrame(walk);
 // });
 
-window.addEventListener('load', () => {
-  ClientGame.init({ tagId: 'game' });
+// const socket = io('https://jsprochat.herokuapp.com');
+const socket = io('https://jspromarathonchat.herokuapp.com');
+
+const btn = document.getElementById('startbtn');
+const formName = document.getElementById('nameForm');
+
+const chat = document.querySelector('.chat-wrap');
+const cform = document.getElementById('form');
+const cinput = document.getElementById('input');
+const message = document.querySelector('.message');
+
+const bclick = (event) => {
+  event.preventDefault();
+  const playerName = document.getElementById('name');
+
+  if (playerName.value) {
+    const startGame = document.getElementsByClassName('start-game');
+
+    formName.removeEventListener('click', bclick);
+    startGame[0].remove();
+
+    ClientGame.init({ tagId: 'game', playerName: playerName.value });
+
+    socket.emit('start', playerName.value);
+
+    chat.style.display = 'block';
+  }
+};
+
+btn.addEventListener('click', bclick);
+cform.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (cinput.value) {
+    socket.emit('chat message', cinput.value);
+    cinput.value = '';
+  }
+});
+
+socket.on('chat message', (data) => {
+  let color = '';
+  // eslint-disable-next-line no-unused-expressions
+  data.id === socket.id ? color = 'red' : color = 'green';
+  message.insertAdjacentHTML('beforeend', `<p><i>${getTime(data.time)}</i> - <strong><span style="color: ${color}">${data.name}</span></strong>: ${data.msg}</p>`);
+});
+
+socket.on('chat connection', (data) => {
+  message.insertAdjacentHTML('beforeend', `<p><i>${getTime(data.time)}</i> - ${data.msg}</p>`);
+});
+
+socket.on('chat disconnect', (data) => {
+  message.insertAdjacentHTML('beforeend', `<p><i>${getTime(data.time)}</i> - ${data.msg}</p>`);
+});
+
+socket.on('chat online', (data) => {
+  let names = '';
+  data.names.forEach((user) => {
+    if (user?.name) names += `${user.name},`;
+  });
+  message.insertAdjacentHTML(
+    'beforeend',
+    `<p><i>${getTime(data.time)}</i> - Нас всего ${data.online}. И вот эти герои: ${names}</p>`,
+  );
 });
